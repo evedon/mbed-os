@@ -35,19 +35,19 @@ Minimal printf is configured by the following parameters defined in `platform/mb
     "name": "platform",
     "config": {
        "minimal-printf-console-output": {
-            "help": "Console output when using mprintf profile. Options: UART, SWO",
+            "help": "Console output when using minimal-printf profile. Options: UART, SWO",
             "value": "UART"
         },
         "minimal-printf-enable-64-bit": {
-            "help": "Enable printing 64 bit integers when using mprintf profile",
+            "help": "Enable printing 64 bit integers when using minimal-printf profile",
             "value": true
         },
         "minimal-printf-enable-file-stream": {
-            "help": "Enable printing to a FILE stream when using mprintf profile",
+            "help": "Enable printing to a FILE stream when using minimal-printf profile",
             "value": true
         },
         "minimal-printf-enable-floating-point": {
-            "help": "Enable floating point printing when using mprintf profile",
+            "help": "Enable floating point printing when using minimal-printf profile",
             "value": true
         },
         "minimal-printf-set-floating-point-max-decimals": {
@@ -80,10 +80,10 @@ In mbed_app.json:
 
 To replace the standard implementation of the printf functions with the ones in this library:
 
-Compile with mbed-cli using the custom `mprintf` profile. For example, to compile in release mode:
+Compile with mbed-cli using the custom `minimal-printf` profile. For example, to compile in release mode:
 
 ```
-$ mbed compile -t <toolchain> -m <target> --profile release --profile mprintf
+$ mbed compile -t <toolchain> -m <target> --profile release --profile minimal-printf
 ```
 
 ## Size comparison
