@@ -22,53 +22,59 @@
 
 
 #if defined(__GNUC__)   /* GCC        */
-    #define SUPER_PRINTF     __real_printf
-    #define SUB_PRINTF       __wrap_printf
-    #define SUPER_SPRINTF    __real_sprintf
-    #define SUB_SPRINTF      __wrap_sprintf
-    #define SUPER_SNPRINTF   __real_snprintf
-    #define SUB_SNPRINTF     __wrap_snprintf
-    #define SUPER_VPRINTF    __real_vprintf
-    #define SUB_VPRINTF      __wrap_vprintf
-    #define SUPER_VSPRINTF   __real_vsprintf
-    #define SUB_VSPRINTF     __wrap_vsprintf
-    #define SUPER_VSNPRINTF  __real_vsnprintf
-    #define SUB_VSNPRINTF    __wrap_vsnprintf
-    #if MBED_CONF_PLATFORM_MINIMAL_PRINTF_ENABLE_FILE_STREAM
-        #define SUPER_FPRINTF  __real_fprintf
-        #define SUB_FPRINTF    __wrap_fprintf
-        #define SUPER_VFPRINTF __real_vfprintf
-        #define SUB_VFPRINTF   __wrap_vfprintf
-    #endif
+#define SUPER_PRINTF     __real_printf
+#define SUB_PRINTF       __wrap_printf
+#define SUPER_SPRINTF    __real_sprintf
+#define SUB_SPRINTF      __wrap_sprintf
+#define SUPER_SNPRINTF   __real_snprintf
+#define SUB_SNPRINTF     __wrap_snprintf
+#define SUPER_VPRINTF    __real_vprintf
+#define SUB_VPRINTF      __wrap_vprintf
+#define SUPER_VSPRINTF   __real_vsprintf
+#define SUB_VSPRINTF     __wrap_vsprintf
+#define SUPER_VSNPRINTF  __real_vsnprintf
+#define SUB_VSNPRINTF    __wrap_vsnprintf
+#if MBED_CONF_PLATFORM_MINIMAL_PRINTF_ENABLE_FILE_STREAM
+#define SUPER_FPRINTF  __real_fprintf
+#define SUB_FPRINTF    __wrap_fprintf
+#define SUPER_VFPRINTF __real_vfprintf
+#define SUB_VFPRINTF   __wrap_vfprintf
+#endif
 #elif defined(TOOLCHAIN_ARM) /* ARMC5/ARMC6 */\
  || defined(__ICCARM__)      /* IAR        */
-    #define SUPER_PRINTF     $Super$$printf
-    #define SUB_PRINTF       $Sub$$printf
-    #define SUPER_SPRINTF    $Super$$sprintf
-    #define SUB_SPRINTF      $Sub$$sprintf
-    #define SUPER_SNPRINTF   $Super$$snprintf
-    #define SUB_SNPRINTF     $Sub$$snprintf
-    #define SUPER_VPRINTF    $Super$$vprintf
-    #define SUB_VPRINTF      $Sub$$vprintf
-    #define SUPER_VSPRINTF   $Super$$vsprintf
-    #define SUB_VSPRINTF     $Sub$$vsprintf
-    #define SUPER_VSNPRINTF  $Super$$vsnprintf
-    #define SUB_VSNPRINTF    $Sub$$vsnprintf
-    #if MBED_CONF_PLATFORM_MINIMAL_PRINTF_ENABLE_FILE_STREAM
-        #define SUPER_FPRINTF    $Super$$fprintf
-        #define SUB_FPRINTF      $Sub$$fprintf
-        #define SUPER_VFPRINTF   $Super$$vfprintf
-        #define SUB_VFPRINTF     $Sub$$vfprintf
-    #endif
+#define SUPER_PRINTF     $Super$$printf
+#define SUB_PRINTF       $Sub$$printf
+#define SUPER_SPRINTF    $Super$$sprintf
+#define SUB_SPRINTF      $Sub$$sprintf
+#define SUPER_SNPRINTF   $Super$$snprintf
+#define SUB_SNPRINTF     $Sub$$snprintf
+#define SUPER_VPRINTF    $Super$$vprintf
+#define SUB_VPRINTF      $Sub$$vprintf
+#define SUPER_VSPRINTF   $Super$$vsprintf
+#define SUB_VSPRINTF     $Sub$$vsprintf
+#define SUPER_VSNPRINTF  $Super$$vsnprintf
+#define SUB_VSNPRINTF    $Sub$$vsnprintf
+#if MBED_CONF_PLATFORM_MINIMAL_PRINTF_ENABLE_FILE_STREAM
+#define SUPER_FPRINTF    $Super$$fprintf
+#define SUB_FPRINTF      $Sub$$fprintf
+#define SUPER_VFPRINTF   $Super$$vfprintf
+#define SUB_VFPRINTF     $Sub$$vfprintf
+#endif
 #else
-    #warning "This compiler is not yet supported."
+#warning "This compiler is not yet supported."
 #endif
 
+// Prevent optimization of printf() by the ARMCC or IAR compiler.
+// This is done to prevent optimization which can cause printf() to be
+// substituted with a different function (e.g. puts()) and cause
+// the output to be missing some strings.
+// Note: Optimization prevention for other supported compilers is done
+//       via compiler optional command line arguments.
 #if defined(__CC_ARM) /* ARMC5 */
-    #pragma push
-    #pragma O0
+#pragma push
+#pragma O0
 #elif defined(__ICCARM__) /* IAR */
-    #pragma optimize=none
+#pragma optimize=none
 #endif
 int SUB_PRINTF(const char *format, ...)
 {
